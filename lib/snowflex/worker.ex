@@ -125,6 +125,9 @@ defmodule Snowflex.Worker do
   defp do_param_query(%{pid: pid} = state, query, params) do
     ch_query = to_charlist(query)
     ch_params = prepare_params(params)
+    IO.puts("#{__ENV__.file}:#{__ENV__.line}")
+    IO.inspect(ch_query, label: "ch_query")
+    IO.inspect(ch_params, label: "ch_params")
 
     case :odbc.param_query(pid, ch_query, ch_params) do
       {:error, reason} ->
@@ -145,7 +148,10 @@ defmodule Snowflex.Worker do
   end
 
   defp prepare_param({{type_atom, _size} = type, values}) when type_atom in @string_types do
-    {type, Enum.map(values, &to_charlist/1)}
+    IO.puts("#{__ENV__.file}:#{__ENV__.line}")
+    IO.inspect(type, label: "type")
+    IO.inspect(values, label: "values")
+    {type, Enum.map(values, &to_charlist/1)} |> IO.inspect()
   end
 
   defp prepare_param(param), do: param

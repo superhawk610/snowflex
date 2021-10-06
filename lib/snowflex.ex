@@ -73,6 +73,13 @@ defmodule Snowflex do
   def int_param(val), do: {:sql_integer, val}
   def string_param(val, length \\ 250), do: {{:sql_varchar, length}, val}
 
+  def boolean_param(vals) when is_list(vals) do
+    {:sql_bit, Enum.map(vals, &boolean_to_bit/1)}
+  end
+
+  defp boolean_to_bit(true), do: 1
+  defp boolean_to_bit(false), do: 0
+
   # Helpers
 
   defp process_results(data, opts) when is_list(data) do
